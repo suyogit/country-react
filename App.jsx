@@ -3,6 +3,7 @@ import Header from './components/Header'
 import './App.css'
 import Search from './components/Search'
 import Filter from './components/Filter'
+import CountryList from './components/CountryList'
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <Search/>
       <Filter/>
     </div>
+    <CountryList/>
 
     </>
   )
