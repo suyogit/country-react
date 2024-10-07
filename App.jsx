@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from "react";
 import Header from './components/Header'
 import './App.css'
 import Search from './components/Search'
@@ -6,14 +6,16 @@ import Filter from './components/Filter'
 import CountryList from './components/CountryList'
 
 const App = () => {
+
+  const [cdata, setcdata] = useState("")
   return (
     <>
     <Header/>
     <div className="middle">
-      <Search/>
+      <Search update={setcdata}/>
       <Filter/>
     </div>
-    <CountryList/>
+    <CountryList cdata={cdata}/>
 
     </>
   )
