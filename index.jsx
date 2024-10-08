@@ -21,7 +21,7 @@ const router = createBrowserRouter([
         element:<Contact />,
       },
       {
-        path:'/detail',
+        path:'/:detail',
         element:<CountryDetails/>,
       }
       ],

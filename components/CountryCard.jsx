@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const CountryCard = ({image, name, population, capital, region}) => {
   return (
-    <Link to={`/detail?country=${name}`}>
+    <Link to={`/${name}`}>
       <div className="card">
         <img src={image} />
         <div className="content">

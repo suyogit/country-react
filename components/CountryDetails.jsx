@@ -1,45 +1,56 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import ErrorPage from "./Error";
 
 const CountryDetails = () => {
-  
-  const [info, setinfo] = useState(null)
+  //     const urlParams = new URLSearchParams(window.location.search);
+  // const country = urlParams.get("country");
+
+  const params = useParams();
+  const country = params.detail;
+
+  const [info, setinfo] = useState(null);
+
+  const [notfound, setnotfound] = useState(false);
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-const country = urlParams.get("country");
-
-
     fetch(`https://restcountries.com/v3.1/name/${country}?fullText=true`)
-  .then((data) => data.json())
-  .then(([data]) => {
+      .then((data) => data.json())
+      .then(([data]) => {
+        setinfo({
+          name: data.name.common,
+          nativeName: Object.values(data.name.nativeName)[0].common,
+          population: data.population.toLocaleString("en-IN"),
+          region: data.region,
+          subregion: data.subregion,
+          capital: data.capital,
+          tld: data.tld,
+          languages: Object.values(data.languages).join(","),
+          currencies: Object.values(data.currencies)
+            .map((currency) => currency.name)
+            .join(","),
+          flags: data.flags.svg,
+        });
+      })
+      .catch((err) => {
+        setnotfound(true);
+      });
+  }, []);
 
-    setinfo(
-      {name:data.name.common,
-        nativeName: Object.values(data.name.nativeName)[0].common,
-        population:data.population.toLocaleString('en-IN'),
-        region:data.region,
-        subregion:data.subregion,
-        capital:data.capital,
-        tld:data.tld,
-        languages:Object.values(data.languages).join(','),
-        currencies: Object.values(data.currencies).map
-        ((currency)=>currency.name).join(','),
-        flags:data.flags.svg
 
-      }
-    )
-  })
-  
-  }, [])
+  if(notfound===true)
+  {
+    return <ErrorPage/>
+  }
 
-  return (
-   info===null?('loading...'):
-    (
+  return info === null ? (
+    "loading..."
+  ) : (
     <>
-    <a href="#" className="back">
-        <button className="back">
-            <i className="fa-solid fa-arrow-left"></i> Back
+      <a href="#" className="back">
+        <button className="back" onClick={()=>history.back()} >
+          <i className="fa-solid fa-arrow-left"></i> Back
         </button>
-    </a>
+      </a>
       <div className="detail">
         <div className="flag">
           <img className="detail-image" src={info.flags} />
@@ -55,7 +66,7 @@ const country = urlParams.get("country");
                 <p>Population: {info.population}</p>
                 <p>Region: {info.region}</p>
                 <p>Sub region: {info.subregion}</p>
-                <p>Capital: {info.capital.join(' ')}</p>
+                <p>Capital: {info.capital.join(" ")}</p>
               </div>
               <div className="right">
                 <p>Top Level Domain: {info.tld}</p>
@@ -73,11 +84,7 @@ const country = urlParams.get("country");
         </div>
       </div>
     </>
-    )
   );
 };
 
 export default CountryDetails;
-
-
-
