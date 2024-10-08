@@ -6,7 +6,6 @@ import Filter from './components/Filter'
 import CountryList from './components/CountryList'
 
 const App = () => {
-
   const [cdata, setcdata] = useState("")
   return (
     <>
@@ -20,5 +19,4 @@ const App = () => {
     </>
   )
 }
-
 export default App

@@ -1,7 +1,22 @@
+import {useState,useEffect} from 'react'
 import CountryCard from "./CountryCard";
-import CountriesData from "../data";
+
+// import CountriesData from "../data";
 
 const CountryList = ({cdata}) => {
+
+const [CountriesData, setCountriesData] = useState([])
+
+useEffect(() => {
+  
+    fetch("https://restcountries.com/v3.1/all")
+    .then((res) => res.json())
+    .then((data)=>{
+        setCountriesData(data)
+    }) 
+  
+}, [])
+
 
 
   return (
