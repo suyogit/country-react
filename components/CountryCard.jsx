@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const CountryCard = ({image, name, population, capital, region}) => {
   return (
-    <a href={`./countries.html?country=${name.common}`}>
+    <Link to={`/detail?country=${name}`}>
       <div className="card">
         <img src={image} />
         <div className="content">
@@ -14,7 +15,7 @@ const CountryCard = ({image, name, population, capital, region}) => {
           <p>Capital: {capital}</p>
         </div>
       </div>
-    </a>
+    </Link>
   );
 };
 
