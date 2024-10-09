@@ -14,10 +14,7 @@ useEffect(() => {
     .then((data)=>{
         setCountriesData(data)
     }) 
-  
 }, [])
-
-
 
   return (
     <>

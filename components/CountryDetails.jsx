@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ErrorPage from "./Error";
 
 const CountryDetails = () => {
-  //     const urlParams = new URLSearchParams(window.location.search);
-  // const country = urlParams.get("country");
+  //const urlParams = new URLSearchParams(window.location.search);
+  //const country = urlParams.get("country");
 
   const params = useParams();
   const country = params.detail;
-
   const [info, setinfo] = useState(null);
-
   const [notfound, setnotfound] = useState(false);
+
   useEffect(() => {
     fetch(`https://restcountries.com/v3.1/name/${country}?fullText=true`)
       .then((data) => data.json())
@@ -29,17 +28,32 @@ const CountryDetails = () => {
             .map((currency) => currency.name)
             .join(","),
           flags: data.flags.svg,
+          borders: [],
+        });
+
+        if(!data.borders)// it handles case, if api doesnot have borders feild
+        {
+          data.borders=[]
+        }
+          
+        data.borders.map((bor) => {
+          fetch(`https://restcountries.com/v3.1/alpha/${bor}`)
+            .then((res) => res.json())
+            .then(([data1]) => {
+              setinfo((prev) => ({
+                ...prev,
+                borders: [...prev.borders, data1.name.common],
+              }));
+            });
         });
       })
       .catch((err) => {
         setnotfound(true);
       });
-  }, []);
+  }, [country]);
 
-
-  if(notfound===true)
-  {
-    return <ErrorPage/>
+  if (notfound === true) {
+    return <ErrorPage />;
   }
 
   return info === null ? (
@@ -47,7 +61,7 @@ const CountryDetails = () => {
   ) : (
     <>
       <a href="#" className="back">
-        <button className="back" onClick={()=>history.back()} >
+        <button className="back back-button" onClick={() => history.back()}>
           <i className="fa-solid fa-arrow-left"></i> Back
         </button>
       </a>
@@ -76,10 +90,20 @@ const CountryDetails = () => {
             </div>
           </div>
           <div className="para">
-            <p>Borders:</p>
-            <a href="?country=North Korea">
-              <button>North Korea</button>
-            </a>
+            {info.borders && info.borders.length > 0 ? (
+              <>
+                <p>Borders: </p>
+                {info.borders.map((bor) => {
+                  return (
+                    <Link to={`/${bor}`} key={bor}>
+                      <button className="back-button">{bor}</button>
+                    </Link>
+                  );
+                })}
+              </>
+            ) : (
+              <p>No border countries available.</p>
+            )}
           </div>
         </div>
       </div>
