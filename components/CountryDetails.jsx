@@ -31,20 +31,31 @@ const CountryDetails = () => {
           borders: [],
         });
 
-        if(!data.borders)// it handles case, if api doesnot have borders feild
-        {
-          data.borders=[]
+        if (!data.borders) {
+          // it handles case, if api doesnot have borders feild
+          data.borders = [];
         }
-          
-        data.borders.map((bor) => {
-          fetch(`https://restcountries.com/v3.1/alpha/${bor}`)
-            .then((res) => res.json())
-            .then(([data1]) => {
-              setinfo((prev) => ({
-                ...prev,
-                borders: [...prev.borders, data1.name.common],
-              }));
-            });
+
+        // data.borders.map((bor) => {
+        //   // here we are using map method and  on each boundry country we are updating our state variable. so this CountryDetails component should run each time updating the state variable. but react optimize to handle this situation (by minimizing number of component call)
+        //   fetch(`https://restcountries.com/v3.1/alpha/${bor}`)
+        //     .then((res) => res.json())
+        //     .then(([data1]) => {
+        //       setinfo((prev) => ({
+        //         ...prev,
+        //         borders: [...prev.borders, data1.name.common],
+        //       }));
+        //     });
+        // });
+
+        Promise.all(
+          data.borders.map((bor) => {
+            return fetch(`https://restcountries.com/v3.1/alpha/${bor}`)
+              .then((res) => res.json())
+              .then(([data1]) => data1.name.common);
+          })
+        ).then((borders) => {
+          setinfo((prev) => ({ ...prev, borders }));
         });
       })
       .catch((err) => {
