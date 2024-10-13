@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+// import './CountryDetails.css'
 
 const CountryCard = ({image, name, population, capital, region}) => {
   return (

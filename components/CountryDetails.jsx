@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ErrorPage from "./Error";
+import CountryDetailsShimmer from "./CountryDetailsShimmer";
 
 const CountryDetails = () => {
   //const urlParams = new URLSearchParams(window.location.search);
@@ -16,22 +17,29 @@ const CountryDetails = () => {
       .then((data) => data.json())
       .then(([data]) => {
         setinfo({
-          name: data.name.common,
-          nativeName: Object.values(data.name.nativeName)[0].common,
-          population: data.population.toLocaleString("en-IN"),
-          region: data.region,
-          subregion: data.subregion,
-          capital: data.capital,
-          tld: data.tld,
-          languages: Object.values(data.languages).join(","),
-          currencies: Object.values(data.currencies)
-            .map((currency) => currency.name)
-            .join(","),
-          flags: data.flags.svg,
+          name: data?.name?.common,
+          nativeName: data?.name?.nativeName
+            ? Object.values(data?.name?.nativeName)[0]?.common
+            : "N/A", // Default value if nativeName is missing
+          population: data?.population?.toLocaleString("en-IN") || "N/A",
+          region: data?.region || "N/A",
+          subregion: data?.subregion || "N/A",
+          capital: data?.capital || ["N/A"],
+          tld: data?.tld || ["N/A"],
+          languages: data?.languages
+            ? Object.values(data?.languages).join(",")
+            : "N/A",
+          currencies: data?.currencies
+            ? Object.values(data?.currencies)
+                .map((currency) => currency?.name)
+                .join(",")
+            : "N/A",
+          flags: data?.flags?.svg || "N/A",
+          // borders: data?.borders || [], // If no borders, keep as an empty array
           borders: [],
         });
 
-        if (!data.borders) {
+        if (!data?.borders) {
           // it handles case, if api doesnot have borders feild
           data.borders = [];
         }
@@ -52,7 +60,7 @@ const CountryDetails = () => {
           data.borders.map((bor) => {
             return fetch(`https://restcountries.com/v3.1/alpha/${bor}`)
               .then((res) => res.json())
-              .then(([data1]) => data1.name.common);
+              .then(([data1]) => data1?.name?.common);
           })
         ).then((borders) => {
           setinfo((prev) => ({ ...prev, borders }));
@@ -68,9 +76,10 @@ const CountryDetails = () => {
   }
 
   return info === null ? (
-    "loading..."
+    <CountryDetailsShimmer />
   ) : (
     <>
+      {/* <CountryDetailsShimmer/> */}
       <a href="#" className="back">
         <button className="back back-button" onClick={() => history.back()}>
           <i className="fa-solid fa-arrow-left"></i> Back
@@ -107,7 +116,7 @@ const CountryDetails = () => {
                 {info.borders.map((bor) => {
                   return (
                     <Link to={`/${bor}`} key={bor}>
-                      <button className="back-button">{bor}</button>
+                      <button className="back-button bor-btn">{bor}</button>
                     </Link>
                   );
                 })}
