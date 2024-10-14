@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 // import './CountryDetails.css'
 
-const CountryCard = ({image, name, population, capital, region}) => {
+const CountryCard = ({image, name, population, capital, region, data}) => {
   return (
-    <Link to={`/${name}`}>
+    <Link to={`/${name}`} state={data}>
       <div className="card">
         <img src={image} />
         <div className="content">
