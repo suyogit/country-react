@@ -11,7 +11,7 @@ const home = () => {
     <>
     <div className="middle">
     <Search update={setcdata}/>
-    <Filter/>
+    <Filter update={setcdata}/>
   </div>
   <CountryList cdata={cdata}/>
   </>

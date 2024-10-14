@@ -17,14 +17,18 @@ const CountryList = ({ cdata }) => {
   }, []);
 
   return CountriesData.length === 0 ? (
-    <CountriesListShimmer/>
-  ) : (  //const urlParams = new URLSearchParams(window.location.search);
+    <CountriesListShimmer />
+  ) : (
+    //const urlParams = new URLSearchParams(window.location.search);
     //const country = urlParams.get("country"); // This would allow you to get the country parameter from the URL if using query strings
-  
+
     <>
       <div className="country-cards">
         {CountriesData.filter((country) => {
-          return country.name.common.toLowerCase().includes(cdata.toLowerCase());
+          return (
+            country.name.common.toLowerCase().includes(cdata.toLowerCase()) ||
+            country.region.toLowerCase().includes(cdata.toLowerCase())
+          );
         }).map((country) => {
           return (
             <CountryCard

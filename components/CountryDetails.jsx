@@ -100,7 +100,7 @@ const CountryDetails = () => {
   ) : (
     <>
       {/* <CountryDetailsShimmer/> */}
-      <a href="#" className="back">
+      <a href="#" className="back middle">
         <button className="back back-button" onClick={() => history.back()}>
           <i className="fa-solid fa-arrow-left"></i> Back
         </button>
